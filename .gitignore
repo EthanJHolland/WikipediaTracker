@@ -1,2 +1,8 @@
 #ignore all files created by VSCode
-**/.vscode/*
+**/.vscode/* 
+
+#ignore pycahce
+__pycache__ 
+
+#ignore articles list
+api/articles.txt
