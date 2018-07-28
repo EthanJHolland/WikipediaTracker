@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask import Flask, request
 
 app = Flask(__name__)
-app.config['DEBUG'] = True #automatically refresh on changes
+#app.config['DEBUG'] = True #automatically refresh on changes
 # CORS(app) #enable CORS for all use cases
 CORS(app, resources={r"*": {"origins": "*"}}) 
 
@@ -33,4 +33,5 @@ def addArticle():
     return json.dumps({'success': True})
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')
+
