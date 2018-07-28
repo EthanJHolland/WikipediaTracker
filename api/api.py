@@ -1,20 +1,19 @@
 import re
 import json
 import subprocess
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask import Flask, request
 
 application = Flask(__name__)
 #app.config['DEBUG'] = True #automatically refresh on changes
-CORS(application) #enable CORS for all use cases
-#CORS(application, resources={r"*": {"origins": "*"}}) 
+#CORS(application) #enable CORS for all use cases
+CORS(application, resources={r"/wikipediatracker": {"origins": "*"}}) 
 
 articlesFile='articles.txt'
 
 @application.route('/wikipediatracker', methods=['GET','POST'])
-#@cross_origin() #allow cors for this method
 def getArticles():
-    if flask.request.method == 'GET':
+    if request.method == 'GET':
         #GET
         if 'n' in request.args:
             n=request.args['n']
@@ -26,9 +25,10 @@ def getArticles():
         #POST
         #expects json body of the form {"article":"Malcolm_Gladwell"}
         with open(articlesFile,'a') as f:
-            f.write('\n'+request.get_json()['article']) #append new article to end of file
-
-        return json.dumps({'success': True})
+            if request.get_json():
+                f.write('\n'+request.get_json()['article']) #append new article to end of file
+                return json.dumps({'success': True})
+        return json.dumps({'success': False})
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0')
