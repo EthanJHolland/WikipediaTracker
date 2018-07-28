@@ -2,7 +2,14 @@
 **/.vscode/* 
 
 #ignore pycahce
-__pycache__ 
+**/__pycache__ 
 
-#ignore articles list
+#used for setting up gunicorn
+api/wsgi.py
+
+#do not want to push articles list
 api/articles.txt
+
+#ignore files created when packing chrome extension
+chromeextension.crx
+chromeextension.pem
