@@ -1,0 +1,15 @@
+{
+    "manifest_version": 2,
+        "name": "Wikipedia Tracker",
+        "description": "Make a post request to a server any time I navigate to a wikipedia page",
+        "version": "0.1",
+        "permissions":[
+            "webNavigation"
+        ],
+        "background": {
+            "scripts": [
+                "script.js"
+            ],
+            "persistent": false
+        }
+    }
