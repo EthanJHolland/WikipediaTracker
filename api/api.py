@@ -12,27 +12,23 @@ CORS(application) #enable CORS for all use cases
 articlesFile='articles.txt'
 
 @application.route('/wikipediatracker', methods=['GET','POST'])
-@cross_origin()
+#@cross_origin() #allow cors for this method
 def getArticles():
-    if 'n' in request.args:
-        n=request.args['n']
+    if flask.request.method == 'GET':
+        #GET
+        if 'n' in request.args:
+            n=request.args['n']
+        else:
+            n=5 #default to 5 articles
+        s=subprocess.check_output(['tail','-n',str(n),articlesFile]).decode('utf-8') #use tail to efficiently get the end of the file and store stdout in s
+        return json.dumps(re.split('\r?\n',s))  #split result of tail on newlines accounting for the possibility of \r\n
     else:
-        n=5 #default to 5 articles
-    print(n)
-    s=subprocess.check_output(['tail','-n',str(n),articlesFile]).decode('utf-8')
-    return json.dumps(re.split('\r?\n',s))
+        #POST
+        #expects json body of the form {"article":"Malcolm_Gladwell"}
+        with open(articlesFile,'a') as f:
+            f.write('\n'+request.get_json()['article']) #append new article to end of file
 
-#@application.route('/wikipediatracker', methods=['POST'])
-#@cross_origin()
-#def addArticle():
-#    '''
-#    append new article to end of file
-#    expects json body of the form {"article":"Malcolm_Gladwell"}
-#    '''
-#    with open(articlesFile,'a') as f:
-#        f.write('\n'+request.get_json()['article'])
-#
-#    return json.dumps({'success': True})
+        return json.dumps({'success': True})
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0')
