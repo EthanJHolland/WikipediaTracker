@@ -20,7 +20,7 @@ def getArticles():
         else:
             n=5 #default to 5 articles
         s=subprocess.check_output(['tail','-n',str(n),articlesFile]).decode('utf-8') #use tail to efficiently get the end of the file and store stdout in s
-        return json.dumps(re.split('\r?\n',s))  #split result of tail on newlines accounting for the possibility of \r\n
+        return json.dumps(reversed(re.split('\r?\n',s)))  #split result of tail on newlines accounting for the possibility of \r\n
     else:
         #POST
         #expects json body of the form {"article":"Malcolm_Gladwell"}
